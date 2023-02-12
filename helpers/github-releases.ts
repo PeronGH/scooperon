@@ -1,4 +1,4 @@
-export async function fetchLatestReleaseFiles(
+export async function fetchLatestReleaseData(
   owner: string,
   repo: string,
   regex?: RegExp,
@@ -29,4 +29,17 @@ export async function fetchLatestReleaseFiles(
   }));
 
   return fileHashes;
+}
+
+export async function fetchLatestVersion(
+  owner: string,
+  repo: string,
+): Promise<string> {
+  const latestReleaseUrl = `https://api.github.com/repos/${owner}/${repo}/releases/latest`;
+
+  // Make a GET request to fetch the latest release data
+  const response = await fetch(latestReleaseUrl);
+  const releaseData = await response.json();
+
+  return releaseData.tag_name;
 }
