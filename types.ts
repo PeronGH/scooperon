@@ -3,39 +3,43 @@ export interface Handler {
 }
 
 export type ScoopAppJSON =
-  & {
-    version: string;
-    description?: string;
-    homepage?: string;
-    license?: string | {
-      identifier: string;
-      url: string;
-    };
-    notes?: string;
-    bin?: string[];
-    env_add_path?: string;
-    persist?: string[];
-  }
-  & (InstallationInfo | {
-    architecture: {
-      "64bit"?: InstallationInfo;
-      "32bit"?: InstallationInfo;
-      "arm64"?: InstallationInfo;
-    };
-  });
+  & BasicInfo
+  & (InstallationInfo | ArchitectureInfo);
 
-interface InstallationInfo {
+export interface ArchitectureInfo {
+  architecture: {
+    "64bit"?: InstallationInfo;
+    "32bit"?: InstallationInfo;
+    "arm64"?: InstallationInfo;
+  };
+}
+
+export interface BasicInfo {
+  version: string;
+  description?: string;
+  homepage?: string;
+  license?: string | {
+    identifier: string;
+    url: string;
+  };
+  notes?: string;
+  bin?: string[];
+  env_add_path?: string;
+  persist?: string[];
+}
+
+export interface InstallationInfo {
   url: string;
   hash?: string;
   extract_dir?: string;
-  pre_install?: string;
+  pre_install?: string | string[];
   installer?: ProgramInvocation;
-  post_install?: string;
+  post_install?: string | string[];
   uninstaller?: ProgramInvocation;
   shortcuts?: Shortcut[];
 }
 
-interface Shortcut {
+export interface Shortcut {
   name: string;
   target: string;
   args?: string;
@@ -45,7 +49,7 @@ interface Shortcut {
   run_as?: string;
 }
 
-interface ProgramInvocation {
+export interface ProgramInvocation {
   script?: string;
   type?: string;
   file?: string;
